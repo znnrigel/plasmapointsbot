@@ -10,4 +10,4 @@ See help menu
 - npm run
 
 Run bot
-- node bot.js
+- node plasmapointsbot.js
