@@ -97,10 +97,15 @@ async function handleFaucetRequest(chatId, username, address) {
     }
 }
 
+function isBot(msg) {
+    return msg.from.is_bot;
+}
+
 async function main() {
     console.log("Initialized the telegram bot")
 
     bot.onText(/\/(start|help)/, async function resp(msg, match) {
+	    if (isBot(msg)) return;
 	    const username = msg.chat.username;
 	    await bot.sendMessage(msg.chat.id,
             "PlasmaPoints Bot\n" +
@@ -110,6 +115,7 @@ async function main() {
     });
 
     bot.onText(/\/faucet (.{40})$/, async function resp(msg, match){
+	if (isBot(msg)) return;
         const chatId = msg.chat.id;
         const username = msg.chat.username;
         const address = match[1].replace(/[\W_]+/g, "");
@@ -117,6 +123,7 @@ async function main() {
     });
 
     bot.onText(/^[0-9]*$/, async function resp(msg) {
+	if (isBot(msg)) return;
         const chatId = msg.chat.id;
         const answer = parseInt(msg.text);
         await challengeResponse(chatId, answer)
